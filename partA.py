@@ -46,9 +46,9 @@ def train(data_x, data_y):
                 y_in = 1
             else:
                 y_in = -1
-            b = b + alpha*(data_y[j]-y_in)
-            w[0] = w[0] + alpha*(data_y[j]-y_in)*x1
-            w[1] = w[1] + alpha*(data_y[j] - y_in)*x2
+            b = b + alpha*(data_y[j]-middle_ans)
+            w[0] = w[0] + alpha*(data_y[j]-middle_ans)*x1
+            w[1] = w[1] + alpha*(data_y[j] - middle_ans)*x2
     print(w[0], w[1], b)
     sum = 0
     good=0

@@ -21,7 +21,7 @@ def create_data():
         data_x = np.append(data_x, random.randint(-100, 100)/100)
         sum=0
     for i in range(0,2000,2):
-        if data_x[i]**2+data_x[i+1]**2>=0.5  and data_x[i]**2+data_x[i+1]**2<=0.75 :
+        if data_x[i]+data_x[i+1]>=0.6 :
             sum+=1
             lables = np.append(lables, 1)
         else:
@@ -42,8 +42,8 @@ def check_validity(data_x, data_y):
 def train(data_x, data_y):
     w = [0, 0]
     b = 0
-    alpha = 0.0001
-    for i in range(500):
+    alpha = 0.01
+    for i in range(1000):
         # print("Epoch ", i, ":", w[0], w[1], b)
         for j,obj in enumerate(data_x):
             x1,x2 = obj[0], obj[1]
@@ -148,8 +148,8 @@ def show(data_x, data_y, prediction, W1, W2, b):
     plt.show()
 
 if __name__ == '__main__':
-    # for i in range(21, 31):
-    #     save(i)
+    for i in range(50, 52):
+        save(i)
 
     # for i in range(1, 11):
     #     data_x, data_y = load(i)
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     # test_accuracy(w1, w2, b)
 
 
-    for i in range(21, 31):
+    for i in range(50, 52):
         print("file "+str(i)+":")
         data_x, data_y = load(i)
         w1, w2, b, prediction = train(data_x, data_y)
