@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 class Adaline(object):
 
-    def __init__(self, eta=0.001, epochs=100):
+    def __init__(self, eta=0.0001, epochs=1000):
         self.eta = eta
         self.epochs = epochs
 
@@ -32,8 +32,10 @@ class Adaline(object):
         return np.where(self.activation(X) > 0.0, 1, -1)
 
 
-X = np.load("train25.npy")
-y =  np.load("lables25.npy")
+X = np.load("large_train.npy")
+y =  np.load("large_lables.npy")
+test_data = np.load("test_data.npy")
+test_labels = np.load("test_lables.npy")
 
 ada = Adaline()
 ada.train(X, y)
@@ -58,8 +60,8 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
    colors = ["red", "yellow", "purple"]
    colormap=ListedColormap(colors)
    # plot class samples
-   plt.scatter(x=X.T[0], y=X.T[1],
-   alpha=0.4, c=ada.predict(X)+3, cmap=colormap
+   plt.scatter(x=test_data.T[0], y=test_data.T[1],
+   alpha=0.4, c=test_labels+3, cmap=colormap
    )
 
 
@@ -72,7 +74,7 @@ plt.ylabel('petal length [standardized]')
 plt.legend(loc='upper left')
 plt.show()
 
-plt.plot(range(1, len(aln.cost) + 1), aln.cost, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Sum-squared-error')
-plt.show()
+# plt.plot(range(1, len(aln.cost) + 1), aln.cost, marker='o')
+# plt.xlabel('Epochs')
+# plt.ylabel('Sum-squared-error')
+# plt.show()

@@ -17,8 +17,15 @@ def create_data():
     lables = np.array([])
     for i in range(1000):
         # data_x = np.random.uniform(-1.0, 1.0, 2000)
-        data_x = np.append(data_x, random.randint(-100, 100)/100)
-        data_x = np.append(data_x, random.randint(-100, 100)/100)
+        coin = random.uniform(0, 1)
+        if coin>0.3:
+            data_x = np.append(data_x, int(random.uniform(-100, 100)) / 100)
+            data_x = np.append(data_x, int(random.uniform(-100, 100)) / 100)
+        else:
+            data_x = np.append(data_x, random.randint(50, 100) / 100)
+            data_x = np.append(data_x, random.randint(50, 100) / 100)
+        # data_x = np.append(data_x, random.randint(-100, 100)/100)
+        # data_x = np.append(data_x, random.randint(-100, 100)/100)
     for i in range(0,2000,2):
         if data_x[i]>0.5 and data_x[i+1]>0.5:
             lables = np.append(lables, 1)
@@ -36,8 +43,8 @@ def check_validity(data_x, data_y):
 def train(data_x, data_y):
     w = [0, 0]
     b = 0
-    alpha = 0.001
-    for i in range(500):
+    alpha = 0.0001
+    for i in range(1000):
         # print("Epoch ", i, ":", w[0], w[1], b)
         for j,obj in enumerate(data_x):
             x1,x2 = obj[0], obj[1]
@@ -141,7 +148,7 @@ def show(data_x, data_y, prediction):
     plt.show()
 
 if __name__ == '__main__':
-    # for i in range(1, 21):
+    # for i in range(100, 103):
     #     save(i)
 
     # for i in range(1, 11):
@@ -154,17 +161,24 @@ if __name__ == '__main__':
     # create_test()
     # create_large_train()
 
-    # data_x = np.load("large_train.npy")
-    # data_y = np.load("large_lables.npy")
-    # w1, w2, b = train(data_x, data_y)
-    # test_accuracy(w1, w2, b)
+    data_x = np.load("large_train.npy")
+    data_y = np.load("large_lables.npy")
+    w1, w2, b, prediction = train(data_x, data_y)
+    test_accuracy(w1, w2, b)
 
 
-    for i in range(10, 11):
-        print("file "+str(i)+":")
-        data_x, data_y = load(i)
-        w1, w2, b, prediction = train(data_x, data_y)
-        test_accuracy(w1, w2, b)
+    # for i in range(100, 103):
+    #     print("file "+str(i)+":")
+    #     data_x, data_y = load(i)
+
+        # sum = 0
+        # for i in range(1000):
+        #     if data_y[i][0]==1:
+        #         sum+=1
+        #         print(data_x[i][0], ",", data_x[i][1],  "==>", data_y[i][0])
+        # print("sum =", sum)
+        # w1, w2, b, prediction = train(data_x, data_y)
+        # test_accuracy(w1, w2, b)
         # show(data_x, data_y, prediction)
 
 
