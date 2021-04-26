@@ -29,14 +29,14 @@ def create_data():
     return (data_x.astype(float), lables.astype(float))
 
 def check_validity(data_x, data_y):
-    for i in range(1000):
+    for i in range(100):
         if data_y[i][0]==1:
             print(data_x[i][0], ",", data_x[i][1],  "==>", data_y[i][0])
 
 def train(data_x, data_y):
     w = [0, 0]
     b = 0
-    alpha = 0.0001
+    alpha = 0.001
     for i in range(500):
         # print("Epoch ", i, ":", w[0], w[1], b)
         for j,obj in enumerate(data_x):
@@ -160,7 +160,7 @@ if __name__ == '__main__':
     # test_accuracy(w1, w2, b)
 
 
-    for i in range(1, 21):
+    for i in range(10, 11):
         print("file "+str(i)+":")
         data_x, data_y = load(i)
         w1, w2, b, prediction = train(data_x, data_y)
