@@ -32,10 +32,10 @@ class Adaline(object):
         return np.where(self.activation(X) > 0.0, 1, -1)
 
 
-X = np.load("large_train.npy")
-y =  np.load("large_lables.npy")
-test_data = np.load("test_data.npy")
-test_labels = np.load("test_lables.npy")
+X = np.load("train21.npy")
+y =  np.load("lables21.npy")
+test_data = np.load("test_data_b.npy")
+test_labels = np.load("test_lables_b.npy")
 
 ada = Adaline()
 ada.train(X, y)
@@ -59,11 +59,17 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
    plt.ylim(xx2.min(), xx2.max())
    colors = ["red", "yellow", "purple"]
    colormap=ListedColormap(colors)
-   # plot class samples
-   plt.scatter(x=test_data.T[0], y=test_data.T[1],
-   alpha=0.4, c=test_labels+3, cmap=colormap
-   )
+#    plt.scatter(x=test_data.T[0], y=test_data.T[1],alpha=0.4, c=test_labels+3, cmap=colormap)
 
+   # plot class samples
+   for pp in (1, -1):
+       labels = test_labels[np.where(test_labels==pp)[0]]
+       labels = [x + 3 for x in labels]
+       ccc= np.zeros(len(labels))+50.0
+       plt.scatter(x=test_data.T[0][np.where(test_labels==pp)[0]], y=test_data.T[1][np.where(test_labels==pp)[0]],
+       alpha=0.4, c = ccc, cmap=colormap)
+       plt.show()
+   
 
 # decision region plot
 plot_decision_regions(X, y, classifier=ada)

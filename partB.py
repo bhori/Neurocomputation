@@ -17,22 +17,28 @@ def create_data():
     lables = np.array([])
     for i in range(1000):
         # data_x = np.random.uniform(-1.0, 1.0, 2000)
-        data_x = np.append(data_x, random.randint(-100, 100)/100)
-        data_x = np.append(data_x, random.randint(-100, 100)/100)
-        sum=0
+        coin = random.uniform(0, 1)
+        if coin>0.3:
+            data_x = np.append(data_x, int(random.uniform(-100, 100)) / 100)
+            data_x = np.append(data_x, int(random.uniform(-100, 100)) / 100)
+        else:
+            data_x = np.append(data_x, random.randint(50, 100) / 100)
+            data_x = np.append(data_x, random.randint(50, 100) / 100)
+        # data_x = np.append(data_x, random.randint(-100, 100)/100)
+        # data_x = np.append(data_x, random.randint(-100, 100)/100)
     for i in range(0,2000,2):
         if data_x[i]**2+data_x[i+1]**2>=0.5  and data_x[i]**2+data_x[i+1]**2<=0.75 :
-            sum+=1
-            lables = np.append(lables, 1)
+             lables = np.append(lables, 1)
         else:
             lables = np.append(lables, -1)
-    print(sum/1000)
     data_x = data_x.reshape(1000, 2)
     lables = lables.reshape(1000, 1)
+    return (data_x.astype(float), lables.astype(float))
+
     # for i in range(1000):
     #     if lables[i][0]==1:
     #      print(data_x[i][0], ",", data_x[i][1],  "==>", lables[i][0], data_x[i][1]**2+data_x[i][0]**2 )
-    return (data_x.astype(float), lables.astype(float))
+
 
 def check_validity(data_x, data_y):
     for i in range(1000):
@@ -42,7 +48,7 @@ def check_validity(data_x, data_y):
 def train(data_x, data_y):
     w = [0, 0]
     b = 0
-    alpha = 0.0001
+    alpha = 0.01
     for i in range(500):
         # print("Epoch ", i, ":", w[0], w[1], b)
         for j,obj in enumerate(data_x):
@@ -103,7 +109,7 @@ def test_accuracy(w1, w2, b):
             good += 1
         correct_prediction = (pred - data_y[i]) ** 2 / 1000
         sum += correct_prediction
-    print(sum)
+    print("sum= ",sum)
     print(good)
     print("test accuracy: "+str(good / 1000))
     print("**************")
@@ -158,7 +164,7 @@ if __name__ == '__main__':
     #     print("*****")
     #     check_validity(data_x, data_y)
 
-    create_test()
+    
     # create_large_train()
 
     # data_x = np.load("large_train.npy")
@@ -166,11 +172,12 @@ if __name__ == '__main__':
     # w1, w2, b = train(data_x, data_y)
     # test_accuracy(w1, w2, b)
 
-
-    for i in range(21, 31):
-        print("file "+str(i)+":")
-        data_x, data_y = load(i)
-        w1, w2, b, prediction = train(data_x, data_y)
+    # print("file "+str(i)+":")
+    data_x, data_y = load(21)
+    w1, w2, b, prediction = train(data_x, data_y)
+    for i in range(22, 31):
+           # create_test()
+        data_x, data_y=load(i)
         test_accuracy(w1, w2, b)
         show(data_x, data_y, prediction,w1, w2, b)
 
