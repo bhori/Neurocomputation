@@ -4,18 +4,22 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib import style
 
-def save(index):
-    data_x, data_y = create_data()
-    np.save("train"+str(index), data_x)
-    np.save("lables" + str(index), data_y)
+def save(features_name=None, labels_name=None, train=False, index=None, size=1000):
+    data_x, data_y = create_data(size)
+    if train==True:
+        np.save("train"+str(index), data_x)
+        np.save("lables" + str(index), data_y)
+    else:
+        np.save(features_name, data_x)
+        np.save(labels_name, data_y)
 
 def load(index):
     return (np.load("train"+str(index)+".npy"), np.load("lables"+str(index)+".npy"))
 
-def create_data():
+def create_data(size=1000):
     data_x = np.array([])
     lables = np.array([])
-    for i in range(1000):
+    for i in range(size):
         # data_x = np.random.uniform(-1.0, 1.0, 2000)
         coin = random.uniform(0, 1)
         if coin>0.3:
@@ -26,13 +30,13 @@ def create_data():
             data_x = np.append(data_x, random.randint(50, 100) / 100)
         # data_x = np.append(data_x, random.randint(-100, 100)/100)
         # data_x = np.append(data_x, random.randint(-100, 100)/100)
-    for i in range(0,2000,2):
+    for i in range(0,2*size,2):
         if data_x[i]>0.5 and data_x[i+1]>0.5:
             lables = np.append(lables, 1)
         else:
             lables = np.append(lables, -1)
-    data_x = data_x.reshape(1000, 2)
-    lables = lables.reshape(1000, 1)
+    data_x = data_x.reshape(size, 2)
+    lables = lables.reshape(size, 1)
     return (data_x.astype(float), lables.astype(float))
 
 def check_validity(data_x, data_y):
@@ -75,21 +79,23 @@ def train(data_x, data_y):
     print(good/1000)
     return (w[0], w[1], b, prediction)
 
-def create_test():
-    data_x, data_y = create_data()
-    np.save("test_data", data_x)
-    np.save("test_lables", data_y)
+def create_test(size=1000):
+    save("test_data", "test_labels", size=size)
+    # data_x, data_y = create_data(size)
+    # np.save("test_data", data_x)
+    # np.save("test_lables", data_y)
 
-def create_large_train():
-    data_x, data_y = create_data()
-    np.save("large_train", data_x)
-    np.save("large_lables", data_y)
+def create_large_train(size=1000):
+    save("large_train", "large_labels", size=size)
+    # data_x, data_y = create_data(size)
+    # np.save("large_train", data_x)
+    # np.save("large_lables", data_y)
 
 def test_accuracy(w1, w2, b):
     # for i in range(1, 21):
         # print("file "+str(i)+":")
     data_x = np.load("test_data.npy")
-    data_y = np.load("test_lables.npy")
+    data_y = np.load("test_labels.npy")
     # for i in range(1000):
     #     if data_y[i][0]==1:
     #         print(data_x[i][0], ",", data_x[i][1],  "==>", data_y[i][0])
@@ -149,7 +155,7 @@ def show(data_x, data_y, prediction):
 
 if __name__ == '__main__':
     # for i in range(100, 103):
-    #     save(i)
+    #     save(index=i)
 
     # for i in range(1, 11):
     #     data_x, data_y = load(i)
@@ -162,7 +168,7 @@ if __name__ == '__main__':
     # create_large_train()
 
     data_x = np.load("large_train.npy")
-    data_y = np.load("large_lables.npy")
+    data_y = np.load("large_labels.npy")
     w1, w2, b, prediction = train(data_x, data_y)
     test_accuracy(w1, w2, b)
 
