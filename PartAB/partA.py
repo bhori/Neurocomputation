@@ -14,7 +14,7 @@ def save(features_name=None, labels_name=None, train=False, index=None, size=100
         np.save(labels_name, data_y)
 
 def load(index):
-    return (np.load("train.npy"), np.load("lables.npy"))
+    return (np.load("../train.npy"), np.load("../lables.npy"))
     # return (np.load("train"+str(index)+".npy"), np.load("lables"+str(index)+".npy"))
 
 def create_data(size=1000):
@@ -105,7 +105,7 @@ def test_accuracy(w1, w2, b):
     # for i in range(1, 21):
         # print("file "+str(i)+":")
     data_x = np.load("test_data.npy")
-    data_y = np.load("test_labels.npy")
+    data_y = np.load("../test_labels.npy")
     # sum=0
     # for i in range(1000):
     #     if data_y[i][0]==1:
@@ -172,7 +172,7 @@ def show(data_x, data_y, prediction):
 
 if __name__ == '__main__':
     # for i in range(1, 103):
-    # save(train=True)
+    save(train=True)
 
     # for i in range(1, 11):
     #     data_x, data_y = load(i)
@@ -181,13 +181,13 @@ if __name__ == '__main__':
     #     print("*****")
     #     check_validity(data_x, data_y)
 
-    # create_test()
+    create_test()
     # create_large_train()
 
-    data_x = np.load("train.npy")
-    data_y = np.load("lables.npy")
-    w1, w2, b, prediction = train(data_x, data_y)
-    test_accuracy(w1, w2, b)
+    # data_x = np.load("../train.npy")
+    # data_y = np.load("../lables.npy")
+    # w1, w2, b, prediction = train(data_x, data_y)
+    # test_accuracy(w1, w2, b)
 
 
     # for i in range(100, 103):

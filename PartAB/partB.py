@@ -14,7 +14,7 @@ def save(features_name=None, labels_name=None, train=False, index=None, size=100
         np.save(labels_name, data_y)
 
 def load(index):
-    return (np.load("train.npy"), np.load("lables.npy"))
+    return (np.load("../train.npy"), np.load("../lables.npy"))
     # return (np.load("train"+str(index)+".npy"), np.load("lables"+str(index)+".npy"))
 
 def create_data(size=1000):
