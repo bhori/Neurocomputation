@@ -4,18 +4,23 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib import style
 
-def save(index):
-    data_x, data_y = create_data()
-    np.save("train"+str(index), data_x)
-    np.save("lables" + str(index), data_y)
+def save(features_name=None, labels_name=None, train=False, index=None, size=1000):
+    data_x, data_y = create_data(size)
+    if train==True:
+        np.save("train", data_x)
+        np.save("lables", data_y)
+    else:
+        np.save(features_name, data_x)
+        np.save(labels_name, data_y)
 
 def load(index):
-    return (np.load("train"+str(index)+".npy"), np.load("lables"+str(index)+".npy"))
+    return (np.load("train.npy"), np.load("lables.npy"))
+    # return (np.load("train"+str(index)+".npy"), np.load("lables"+str(index)+".npy"))
 
-def create_data():
+def create_data(size=1000):
     data_x = np.array([])
     lables = np.array([])
-    for i in range(1000):
+    for i in range(size):
         # data_x = np.random.uniform(-1.0, 1.0, 2000)
         coin = random.uniform(0, 1)
         if coin>0.3:
