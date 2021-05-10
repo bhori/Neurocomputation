@@ -5,156 +5,45 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import glob
-
-# class Net():
-#     def __init__(self, number_of_neurons=2):
-#         inputs = tf.keras.Input(shape=(2,))
-#         x = tf.keras.layers.Dense(number_of_neurons, activation='relu')(inputs)
-#         outputs = tf.keras.layers.Dense(1, activation='tanh')(x)
-#         self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
-#         self.history = None
-#
-#     def summary(self):
-#         self.model.summary()
-#
-#     def train(self, data, labels, optimizer='adam',loss=keras.losses.MeanSquaredError(), epochs = 400):
-#         self.model.compile(optimizer=optimizer,
-#                       loss=loss,  # keras.losses.MeanSquaredError 'binary_crossentropy'
-#                       metrics=['accuracy'])
-#
-#         self.history = model.fit(x=data, y=labels, epochs=epochs)
-#
-#     def show(self, test_data, test_labels):
-#         # Show results in graph view
-#         plt.clf()
-#         plt.plot(self.history.history['accuracy'], label='accuracy')
-#         plt.xlabel('Epoch')
-#         plt.ylabel('Accuracy')
-#         plt.ylim([0, 1])
-#         plt.legend(loc='lower right')
-#         # plt.show()
-#
-#         test_loss, test_acc = self.model.evaluate(test_data, test_labels, verbose=2)
-#
-#         plt.show()
-#
-#     def save(self, number_of_neurons):
-#         # Show results in graph view
-#         plt.clf()
-#         plt.title(str(number_of_neurons) + ' neurons')
-#         plt.plot(self.history.history['accuracy'], label='accuracy')
-#         plt.xlabel('Epoch')
-#         plt.ylabel('Accuracy')
-#         plt.ylim([0, 1])
-#         plt.legend(loc='lower right')
-#
-#         test_loss, test_acc = self.model.evaluate(test_data, test_labels, verbose=2)
-#
-#         plt.savefig('Images/partC/' + str(number_of_neurons) + '.png')
+from matplotlib.colors import ListedColormap
+import os
+import sys
 
 
-def build(number_of_neurons=2):
-    inputs = tf.keras.Input(shape=(2,))
-    x = tf.keras.layers.Dense(number_of_neurons, activation='relu')(inputs)
-    outputs = tf.keras.layers.Dense(1, activation='tanh')(x)
-    model = tf.keras.Model(inputs=inputs, outputs=outputs)
-    return model
+from ttt import AdalineGD
 
-
-def train(model, data, labels, optimizer='adam',loss=keras.losses.MeanSquaredError(), epochs = 400):
-    model.compile(optimizer=optimizer,
-                  loss=loss,  # keras.losses.MeanSquaredError 'binary_crossentropy'
-                  metrics=['accuracy'])
-
-    history = model.fit(x=data, y=labels, epochs=epochs)
-    return history
-
-def load(file_name):
-    return np.load(file_name)
-
+def input_new(data_x,weight_layer,bias_layer):
+    big_array = []
+    #for every record
+    for i in range(data_x.T[0].size):
+        array = []
+        # for every neuron
+        for i, (w, b) in enumerate(zip(weight_layer,bias_layer)):
+            pred = w[0] * data_x[i][0] + w[1] * data_x[i][1] + b
+            #relu
+            if pred<0 :
+                pred=0
+            array.append(pred)
+        array=np.array(array)
+        big_array.append(array)
+    big_array=np.array(big_array)
+    print(big_array.shape)
+    return big_array
 def print_data(data, labels):
     for i in range(1000):
         if labels[i][0]==1:
             print(data[i][0], ",", data[i][1],  "==>", labels[i][0])
 
-def show(model, history, test_data, test_labels):
-    # Show results in graph view
-    plt.clf()
-    plt.plot(history.history['accuracy'], label='accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.ylim([0, 1])
-    plt.legend(loc='lower right')
-    # plt.show()
+data_x = np.load('train.npy')
+labels = np.load('lables.npy')
+labels = labels.flatten()
 
-    test_loss, test_acc = model.evaluate(test_data, test_labels, verbose=2)
-
-    plt.show()
-
-def save(model, history, number_of_neurons):
-    # Show results in graph view
-    plt.clf()
-    plt.title(str(number_of_neurons)+' neurons')
-    plt.plot(history.history['accuracy'], label='accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.ylim([0, 1])
-    plt.legend(loc='lower right')
-
-    test_loss, test_acc = model.evaluate(test_data, test_labels, verbose=2)
-
-    plt.savefig('Images/partC/'+str(number_of_neurons)+'.png')
-
-
-if __name__ == '__main__':
-    data_x = load('../train.npy')
-    labels = load('../lables.npy')
-    test_data = load('../test_data.npy')
-    test_labels = load('../test_labels.npy')
-    for i in range(2, 10):
-        model = build(number_of_neurons=i)
-        model.summary()
-        history = train(model, data_x, labels)
-        show(model, history, test_data, test_labels)
-        # save(model, history, number_of_neurons=i)
-
-    # for i in range(2, 10):
-    #     model = Net(number_of_neurons=i)
-    #     model.summary()
-    #     model.train(model, data_x, labels)
-    #     model.show(model, model.history, test_data, test_labels)
-    #     # save(model, history, number_of_neurons=i)
-
-# The good version before separating to functions:
-
-# inputs = tf.keras.Input(shape=(2,))
-# x = tf.keras.layers.Dense(100, activation='relu')(inputs)
-# outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
-# model = tf.keras.Model(inputs=inputs, outputs=outputs)
-
-
-# model.compile(optimizer='adam',
-#                   loss= keras.losses.MeanSquaredError(), # keras.losses.MeanSquaredError 'binary_crossentropy'
-#                   metrics=['accuracy'])
-#
-# history = model.fit(x=data_x, y=labels, epochs=400)
-
-# # Show results in graph view
-# plt.plot(history.history['accuracy'], label='accuracy')
-# plt.xlabel('Epoch')
-# plt.ylabel('Accuracy')
-# plt.ylim([0, 1])
-# plt.legend(loc='lower right')
-# # plt.show()
-#
-# test_loss, test_acc = model.evaluate(test_data, test_labels, verbose=2)
-#
-# plt.show()
-
-
-
-
-# Other versions:
+# print_data(data_x, labels)
+# labels = labels.flatten()
+test_data = np.load('test_data.npy')
+test_labels = np.load('test_labels.npy')
+# print_data(test_data, test_labels)
+# test_labels = test_labels.flatten()
 
 # model = keras.models.Sequential()
 #
@@ -166,3 +55,102 @@ if __name__ == '__main__':
 # model.add(keras.Input(shape=(2,)))
 # model.add(layers.Dense(100, activation='relu')) # , input_shape=(2, )
 # model.add(layers.Dense(1))
+
+inputs = tf.keras.Input(shape=(2,))
+x = tf.keras.layers.Dense(4, activation='relu')(inputs)
+outputs = tf.keras.layers.Dense(1, activation='linear')(x)
+model = tf.keras.Model(inputs=inputs, outputs=outputs)
+
+
+model.summary()
+
+model.compile(optimizer='adam',
+                  loss=tf.keras.losses.MeanSquaredError(),
+                  metrics=['accuracy'])
+
+history = model.fit(x=data_x, y=labels, epochs=10)
+
+# Show results in graph view
+plt.plot(history.history['accuracy'], label='accuracy')
+# plt.plot(history.history['val_accuracy'], label='val_accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0, 1])
+plt.legend(loc='lower right')
+# plt.show()
+
+test_loss, test_acc = model.evaluate(test_data, test_labels, verbose=2)
+
+plt.show()
+
+
+def plot_decision_regions(X, y, classifier, resolution=0.02):
+# setup marker generator and color map
+    markers = ('s', 'x', 'o', '^', 'v')
+    colors = ('r', 'b', 'g', 'k', 'grey')
+    cmap = ListedColormap(colors[:len(np.unique(y))])
+    
+    # plot the decision regions by creating a pair of grid arrays xx1 and xx2 via meshgrid function in Numpy
+    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution))
+    
+    # use predict method to predict the class labels z of the grid points
+    Z = classifier.predict(np.array([xx1.ravel(),xx2.ravel()]).T)
+    Z = Z.reshape(xx1.shape)
+    
+    # draw the contour using matplotlib
+    plt.contourf(xx1, xx2, Z, alpha=0.4, cmap=cmap)
+    plt.xlim(xx1.min(), xx1.max())
+    plt.ylim(xx2.min(), xx2.max())
+    
+    # plot class samples
+    for i, cl in enumerate(np.unique(y)):
+        plt.scatter(x=X[y==cl, 0], y=X[y==cl, 1], alpha=0.8, c=cmap(i), marker=markers[4], label=cl)
+plot_decision_regions(data_x, labels, classifier=model)
+
+plt.title(' 2 Layers - nonlinear learning')
+plt.xlabel('sepal length [standardized]')
+plt.ylabel('petal length [standardized]')
+plt.legend(loc='upper left')
+plt.show()
+
+inputs_n = tf.keras.Input(shape=(2,))
+outputs_n = tf.keras.layers.Dense(1, activation='sigmoid')(inputs_n)
+model_n = tf.keras.Model(inputs=inputs_n, outputs=outputs_n)
+W_and_b =model.layers[1].get_weights()
+print(W_and_b)
+weight_layer=W_and_b[0].T
+bias_layer= W_and_b[1]
+input_new(data_x,weight_layer,bias_layer)
+adasgd = AdalineGD(n_iter=200, eta=0.01)
+adasgd.fit(data_x, labels)
+
+
+
+# for i, (w, b) in enumerate(zip(weight_layer,bias_layer)):
+#     l=[]
+#     w= np.array(w)
+#     num_of_w = w.size
+#     w=np.reshape(w,(num_of_w,1))
+#     b= np.array(b)
+#     b=np.reshape(b,(1,))
+#     l.append(w)
+#     l.append(b)
+#     l = l.flatten()
+#     # model_n.layers[1].set_weights(l)
+#     # print(model_n.layers[1].get_weights())
+#     # plot_decision_regions(data_x, labels, classifier=model_n)
+#     # plt.title('the learning of layer 1 - neuron '+str(i))
+#     # plt.xlabel('sepal length [standardized]')
+#     # plt.ylabel('petal length [standardized]')
+#     # plt.legend(loc='upper left')
+#     # plt.show()
+#     ada = AdalineGD(n_iter=200, eta=0.01)
+#     ada.fit(data_x,labels)
+plot_decision_regions(data_x, labels, classifier=adasgd)
+plt.title('the learning of layer 1 - neuron ')
+plt.xlabel('sepal length [standardized]')
+plt.ylabel('petal length [standardized]')
+plt.legend(loc='upper left')
+plt.show()
