@@ -76,8 +76,8 @@ test_labels = np.load('test_lables_b.npy')
 # model.add(layers.Dense(1))
 
 inputs = tf.keras.Input(shape=(2,))
-c= tf.keras.layers.Dense(2, activation='relu')(inputs)
-x = tf.keras.layers.Dense(2, activation='relu')(c)
+c= tf.keras.layers.Dense(16, activation='relu')(inputs)
+x = tf.keras.layers.Dense(8, activation='relu')(c)
 outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
 model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
