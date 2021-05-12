@@ -5,11 +5,14 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 
 
-class Adaline:
-    def __init__(self, w,b):
+class Adaline(object):
+    def __init__(self, w=None,b=None):
            # instance variable unique to each instance
+        self.w=w
         self.b=b
-    def train(self,data_x, data_y):
+    def fit(self, data_x, data_y):
+        self.w = np.zeros(data_x.shape[1])
+        self.b =0
         alpha = 0.01
         for i in range(100):
             # print("Epoch ", i, ":", w[0], w[1], b)
@@ -29,12 +32,12 @@ class Adaline:
         sum = 0
         good=0
         prediction = np.array([])
-        for i in range(X.size-1):
+        for i in range(len(X)-1):
             pred = self.w[0]*X[i][0]+self.w[1]*X[i][1]+self.b
-            if pred>=0:
+            if pred>=0.5:
                 prediction = np.append(prediction, 1)
             else:
-                prediction = np.append(prediction, -1)
+                prediction = np.append(prediction, 0)
             # if (pred >= 0 and data_y[i]==1) or (pred < 0 and data_y[i]==-1):
             #     good+=1
             # correct_prediction = (pred - data_y[i])**2/1000
