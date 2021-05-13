@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import math 
 # from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import style
@@ -7,8 +8,8 @@ from matplotlib import style
 def save(features_name=None, labels_name=None, train=False, index=None, size=1000):
     data_x, data_y = create_data(size)
     if train==True:
-        np.save("train", data_x)
-        np.save("lables", data_y)
+        np.save("train_b", data_x)
+        np.save("lables_b", data_y)
     else:
         np.save(features_name, data_x)
         np.save(labels_name, data_y)
@@ -22,22 +23,49 @@ def create_data(size=1000):
     lables = np.array([])
     for i in range(size):
         # data_x = np.random.uniform(-1.0, 1.0, 2000)
-        coin = random.uniform(0, 1)
-        if coin>0.3:
-            data_x = np.append(data_x, int(random.uniform(-100, 100)) / 100)
-            data_x = np.append(data_x, int(random.uniform(-100, 100)) / 100)
+        coin = random.randint(0, 1)
+        # print(coin)
+        if coin==0:
+            coin2 = random.uniform(0.5, 0.75)
+            sqrt_coin2= math.sqrt(coin2)
+            coin_x= random.uniform(-1*sqrt_coin2,sqrt_coin2)
+        
+            coin_m=  random.randint(0, 1)
+            if coin_m==0 :
+                y= -1*math.sqrt(coin2-coin_x**2)
+            else :
+                y= math.sqrt(coin2-coin_x**2)
+            data_x = np.append(data_x, coin_x )
+            data_x = np.append(data_x, y )
         else:
-            data_x = np.append(data_x, random.randint(50, 100) / 100)
-            data_x = np.append(data_x, random.randint(50, 100) / 100)
+            coin_z = random.randint(0, 2)
+            if coin_z==2:
+                coin2= random.uniform(0.75, 1.0)
+            else:
+                coin2= random.uniform(0, 0.5)
+            sqrt_coin2= math.sqrt(coin2)
+            coin_x= random.uniform(-1*sqrt_coin2,sqrt_coin2)
+            coin_m=  random.randint(0, 1)
+            if coin_m==0 :
+                y= -1*math.sqrt(coin2-coin_x**2)
+            else :
+                y= math.sqrt(coin2-coin_x**2)
+            data_x = np.append(data_x, coin_x )
+            data_x = np.append(data_x, y )
         # data_x = np.append(data_x, random.randint(-100, 100)/100)
         # data_x = np.append(data_x, random.randint(-100, 100)/100)
-    for i in range(0,2000,2):
-        if data_x[i]**2+data_x[i+1]**2>=0.5  and data_x[i]**2+data_x[i+1]**2<=0.75 :
-             lables = np.append(lables, 1)
+    count1=0
+
+    for i in range(0,2*size,2):
+        if data_x[i]**2+data_x[i+1]**2>0.5 and  0.75>data_x[i]**2+data_x[i+1]**2:
+            lables = np.append(lables, 1)
+            count1=count1+1
         else:
-            lables = np.append(lables, -1)
-    data_x = data_x.reshape(1000, 2)
-    lables = lables.reshape(1000, 1)
+            lables = np.append(lables, 0)
+        print(data_x[i]**2+data_x[i+1]**2)
+    print(count1)
+    data_x = data_x.reshape(size, 2)
+    lables = lables.reshape(size, 1)
     return (data_x.astype(float), lables.astype(float))
 
     # for i in range(1000):
@@ -160,8 +188,8 @@ def show(data_x, data_y, prediction, W1, W2, b):
 
 if __name__ == '__main__':
     # for i in range(21, 31):
-    #     save(i)
-
+        save(train=True)
+        create_test()
     # for i in range(1, 11):
     #     data_x, data_y = load(i)
     #     print("*****")
@@ -178,13 +206,13 @@ if __name__ == '__main__':
     # test_accuracy(w1, w2, b)
 
     # print("file "+str(i)+":")
-    data_x, data_y = load(21)
-    w1, w2, b, prediction = train(data_x, data_y)
-    for i in range(22, 31):
-           # create_test()
-        data_x, data_y=load(i)
-        test_accuracy(w1, w2, b)
-        show(data_x, data_y, prediction,w1, w2, b)
+    # data_x, data_y = load(21)
+    # w1, w2, b, prediction = train(data_x, data_y)
+    # for i in range(22, 31):
+    #        # create_test()
+    #     data_x, data_y=load(i)
+    #     test_accuracy(w1, w2, b)
+    #     show(data_x, data_y, prediction,w1, w2, b)
 
 
 

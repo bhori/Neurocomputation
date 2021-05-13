@@ -6,9 +6,15 @@ from matplotlib import style
 
 def save(features_name=None, labels_name=None, train=False, index=None, size=1000):
     data_x, data_y = create_data(size)
+    # if train==True:
+    #     np.save("train", data_x)
+    #     np.save("lables", data_y)
+    # else:
+    #     np.save(features_name, data_x)
+    #     np.save(labels_name, data_y)
     if train==True:
-        np.save("train", data_x)
-        np.save("lables", data_y)
+        np.save("train_b", data_x)
+        np.save("lables_b", data_y)
     else:
         np.save(features_name, data_x)
         np.save(labels_name, data_y)
