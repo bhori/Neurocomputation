@@ -44,7 +44,7 @@ def create_data(size=1000):
         if data_x[i]>0.5 and data_x[i+1]>0.5:
             lables = np.append(lables, 1)
         else:
-            lables = np.append(lables, -1)
+            lables = np.append(lables, 0)
     data_x = data_x.reshape(size, 2)
     lables = lables.reshape(size, 1)
     return (data_x.astype(float), lables.astype(float))

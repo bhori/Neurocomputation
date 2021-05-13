@@ -34,14 +34,14 @@ def print_data(data, labels):
         if labels[i][0]==1:
             print(data[i][0], ",", data[i][1],  "==>", labels[i][0])
 
-data_x = np.load('train.npy')
-labels = np.load('lables.npy')
+data_x = np.load('../train.npy')
+labels = np.load('../lables.npy')
 labels = labels.flatten()
 
 # print_data(data_x, labels)
 # labels = labels.flatten()
-test_data = np.load('test_data.npy')
-test_labels = np.load('test_labels.npy')
+test_data = np.load('../test_data.npy')
+test_labels = np.load('../test_labels.npy')
 # print_data(test_data, test_labels)
 # test_labels = test_labels.flatten()
 
@@ -68,7 +68,7 @@ model.compile(optimizer='adam',
                   loss=tf.keras.losses.MeanSquaredError(),
                   metrics=['accuracy'])
 
-history = model.fit(x=data_x, y=labels, epochs=10)
+history = model.fit(x=data_x, y=labels, epochs=100)
 
 # Show results in graph view
 plt.plot(history.history['accuracy'], label='accuracy')
@@ -122,32 +122,34 @@ W_and_b =model.layers[1].get_weights()
 print(W_and_b)
 weight_layer=W_and_b[0].T
 bias_layer= W_and_b[1]
-input_new(data_x,weight_layer,bias_layer)
+input_n = input_new(data_x,weight_layer,bias_layer)
 adasgd = AdalineGD(n_iter=200, eta=0.01)
 adasgd.fit(data_x, labels)
 
 
 
-# for i, (w, b) in enumerate(zip(weight_layer,bias_layer)):
-#     l=[]
-#     w= np.array(w)
-#     num_of_w = w.size
-#     w=np.reshape(w,(num_of_w,1))
-#     b= np.array(b)
-#     b=np.reshape(b,(1,))
-#     l.append(w)
-#     l.append(b)
-#     l = l.flatten()
-#     # model_n.layers[1].set_weights(l)
-#     # print(model_n.layers[1].get_weights())
-#     # plot_decision_regions(data_x, labels, classifier=model_n)
-#     # plt.title('the learning of layer 1 - neuron '+str(i))
-#     # plt.xlabel('sepal length [standardized]')
-#     # plt.ylabel('petal length [standardized]')
-#     # plt.legend(loc='upper left')
-#     # plt.show()
-#     ada = AdalineGD(n_iter=200, eta=0.01)
-#     ada.fit(data_x,labels)
+for i, (w, b) in enumerate(zip(weight_layer,bias_layer)):
+    l=[]
+    w= np.array(w)
+    num_of_w = w.size
+    w=np.reshape(w,(num_of_w,1))
+    b= np.array(b)
+    b=np.reshape(b,(1,))
+    l.append(w)
+    l.append(b)
+    # l = np.array(l)
+    # l = l.flatten()
+    model_n.layers[1].set_weights(l)
+    print(model_n.layers[1].get_weights())
+    plot_decision_regions(data_x, labels, classifier=model_n)
+    plt.title('the learning of layer 1 - neuron '+str(i))
+    plt.xlabel('sepal length [standardized]')
+    plt.ylabel('petal length [standardized]')
+    plt.legend(loc='upper left')
+    plt.show()
+
+ada = AdalineGD(n_iter=200, eta=0.01)
+ada.fit(input_n,labels)
 plot_decision_regions(data_x, labels, classifier=adasgd)
 plt.title('the learning of layer 1 - neuron ')
 plt.xlabel('sepal length [standardized]')
