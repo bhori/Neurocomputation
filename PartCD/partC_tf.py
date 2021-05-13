@@ -53,14 +53,14 @@ def print_data(data, labels):
         if labels[i][0]==1:
             print(data[i][0], ",", data[i][1],  "==>", labels[i][0])
 
-data_x = np.load('train_b.npy')
-labels = np.load('lables_b.npy')
+data_x = np.load('train.npy')
+labels = np.load('lables.npy')
 labels = labels.flatten()
 
 # print_data(data_x, labels)
 # labels = labels.flatten()
-test_data = np.load('test_data_b.npy')
-test_labels = np.load('test_lables_b.npy')
+test_data = np.load('test_data.npy')
+test_labels = np.load('test_labels.npy')
 # print_data(test_data, test_labels)
 # test_labels = test_labels.flatten()
 
@@ -76,8 +76,8 @@ test_labels = np.load('test_lables_b.npy')
 # model.add(layers.Dense(1))
 
 inputs = tf.keras.Input(shape=(2,))
-c= tf.keras.layers.Dense(16, activation='relu')(inputs)
-x = tf.keras.layers.Dense(8, activation='relu')(c)
+c= tf.keras.layers.Dense(7, activation='relu')(inputs)
+x = tf.keras.layers.Dense(4, activation='relu')(c)
 outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
 model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
@@ -88,7 +88,7 @@ model.compile(optimizer='adam',
                   loss=tf.keras.losses.MeanSquaredError(),
                   metrics=['accuracy'])
 
-history = model.fit(x=data_x, y=labels, epochs=400, batch_size=20)
+history = model.fit(x=data_x, y=labels, epochs=400, batch_size=50)
 
 # Show results in graph view
 plt.plot(history.history['accuracy'], label='accuracy')
@@ -140,7 +140,7 @@ plot_res(data_x, labels, classifier=model)
 inputs_n = tf.keras.Input(shape=(2,))
 outputs_n = tf.keras.layers.Dense(1, activation='relu')(inputs_n)
 model_n = tf.keras.Model(inputs=inputs_n, outputs=outputs_n)
-W_and_b =model.layers[2].get_weights()
+W_and_b =model.layers[1].get_weights()
 print(W_and_b)
 weight_layer=W_and_b[0].T
 bias_layer= W_and_b[1]
@@ -148,8 +148,8 @@ inputn=input_new(data_x,weight_layer,bias_layer)
 
 
 X=data_x
-X[:,0] = (data_x[:,0] - data_x[:,0].mean()) / data_x[:,0].std()
-X[:,1] = (data_x[:,1] - data_x[:,1].mean()) / data_x[:,1].std()
+# X[:,0] = (data_x[:,0] - data_x[:,0].mean()) / data_x[:,0].std()
+# X[:,1] = (data_x[:,1] - data_x[:,1].mean()) / data_x[:,1].std()
 
 # gs = gridspec.GridSpec(2, 1)
 # fig = plt.figure(figsize=(10, 8))

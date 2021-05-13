@@ -17,8 +17,8 @@ def plot_res(X, y, classifier):
 
 
     y= y.astype(int)
-    X[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()
-    X[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
+    # X[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()
+    # X[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
     y= y.reshape(y.size,1).flatten()
     # Loading some example data
     # X = X[:,[0, 2]]
@@ -26,7 +26,7 @@ def plot_res(X, y, classifier):
     # Plotting Decision Regions
 
     gs = gridspec.GridSpec(1, 1)
-    fig = plt.figure(figsize=(10, 8))
+    fig = plt.figure(figsize=(3, 3))
 
     labels = ['Adaline']
 
