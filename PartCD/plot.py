@@ -28,7 +28,7 @@ def plot_res(X, y, classifier):
     gs = gridspec.GridSpec(1, 1)
     fig = plt.figure(figsize=(3, 3))
 
-    labels = ['Adaline']
+    labels = ['Neural Network - two hidden layers']
 
     for clf, lab, grd in zip([classifier],
                             labels,
