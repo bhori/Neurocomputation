@@ -35,8 +35,8 @@ def create_data(size=1000):
                 y= -1*math.sqrt(coin2-coin_x**2)
             else :
                 y= math.sqrt(coin2-coin_x**2)
-            data_x = np.append(data_x, coin_x )
-            data_x = np.append(data_x, y )
+            data_x = np.append(data_x,  int(coin_x*100)/100 )
+            data_x = np.append(data_x, int(y*100)/100 )
         else:
             coin_z = random.randint(0, 2)
             if coin_z==2:
@@ -50,8 +50,8 @@ def create_data(size=1000):
                 y= -1*math.sqrt(coin2-coin_x**2)
             else :
                 y= math.sqrt(coin2-coin_x**2)
-            data_x = np.append(data_x, coin_x )
-            data_x = np.append(data_x, y )
+            data_x = np.append(data_x,  int(coin_x*100)/100 )
+            data_x = np.append(data_x, int(y*100)/100 )
         # data_x = np.append(data_x, random.randint(-100, 100)/100)
         # data_x = np.append(data_x, random.randint(-100, 100)/100)
     count1=0
@@ -62,7 +62,7 @@ def create_data(size=1000):
             count1=count1+1
         else:
             lables = np.append(lables, 0)
-        print(data_x[i]**2+data_x[i+1]**2)
+        # print(data_x[i]**2+data_x[i+1]**2)
     print(count1)
     data_x = data_x.reshape(size, 2)
     lables = lables.reshape(size, 1)
@@ -94,7 +94,7 @@ def train(data_x, data_y):
             b = b + alpha*(data_y[j]-middle_ans)
             w[0] = w[0] + alpha*(data_y[j]-middle_ans)*x1
             w[1] = w[1] + alpha*(data_y[j] - middle_ans)*x2
-    print(w[0], w[1], b)
+    # print(w[0], w[1], b)
     sum = 0
     good=0
     prediction = np.array([])
@@ -109,9 +109,6 @@ def train(data_x, data_y):
             good+=1
         correct_prediction = (pred - data_y[i])**2/1000
         sum += correct_prediction
-    print(sum)
-    print(good)
-    print(good/1000)
     return (w[0], w[1], b, prediction)
 
 def create_test():
@@ -142,10 +139,10 @@ def test_accuracy(w1, w2, b):
             good += 1
         correct_prediction = (pred - data_y[i]) ** 2 / 1000
         sum += correct_prediction
-    print("sum= ",sum)
-    print(good)
-    print("test accuracy: "+str(good / 1000))
-    print("**************")
+    # print("sum= ",sum)
+    # print(good)
+    # print("test accuracy: "+str(good / 1000))
+    # print("**************")
 
 def show(data_x, data_y, prediction, W1, W2, b):
 

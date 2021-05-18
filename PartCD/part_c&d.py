@@ -33,13 +33,21 @@ def print_data(data, labels):
         if labels[i][0]==1:
             print(data[i][0], ",", data[i][1],  "==>", labels[i][0])
 
-#load data
+#load data b
 X = np.load('train_b.npy')
 labels = np.load('lables_b.npy')
 test_data = np.load('test_data_b.npy')
 test_labels = np.load('test_lables_b.npy')
 labels= labels.astype(np.integer)
 labels= labels.flatten()
+
+#load data a
+# X = np.load('train.npy')
+# labels = np.load('lables.npy')
+# test_data = np.load('test_data.npy')
+# test_labels = np.load('test_labels.npy')
+# labels= labels.astype(np.integer)
+# labels= labels.flatten()
 
 
 
@@ -55,20 +63,22 @@ model.summary()
 model.compile(optimizer='adam',
                   loss=tf.keras.losses.MeanSquaredError(),
                   metrics=['accuracy'])
-history = model.fit(x=X, y=labels, epochs=1000, batch_size=97)
+history = model.fit(x=X, y=labels, epochs=1000, batch_size=112)
 
 #save dada,prediction, class prediction, true label for all data record
 dt= np.array(list(zip(X.T[0] ,X.T[1] ,model.predict(X),np.where(model.predict(X)>= 0.5, 1, 0),labels)))
-np.savetxt("data-predict_class-predict_true-label.csv", dt , fmt="%f" ,delimiter=",")
+np.savetxt("btrain_data-predict_class-predict_true-label.csv", dt , fmt="%f" ,delimiter=",")
+dt= np.array(list(zip(test_data.T[0] ,test_data.T[1] ,model.predict(test_data),np.where(model.predict(test_data)>= 0.5, 1, 0),test_labels)))
+np.savetxt("btest_data-predict_class-predict_true-label.csv", dt , fmt="%f" ,delimiter=",")
 
 #save learning weights for every neuron in each layer
-np.savetxt("data-weights-layer1.csv", (model.layers[1].get_weights()[0][0],model.layers[1].get_weights()[0][1]
+np.savetxt("bdata-weights-layer1.csv", (model.layers[1].get_weights()[0][0],model.layers[1].get_weights()[0][1]
     ,model.layers[1].get_weights()[1]) ,fmt="%f",delimiter=",", header= "each column represent neuron and each row represent a weight when last row represent the bias")
-np.savetxt("data-weights-layer2.csv", (model.layers[2].get_weights()[0][0],model.layers[2].get_weights()[0][1]
+np.savetxt("bdata-weights-layer2.csv", (model.layers[2].get_weights()[0][0],model.layers[2].get_weights()[0][1]
     ,model.layers[2].get_weights()[0][2],model.layers[2].get_weights()[0][3],model.layers[2].get_weights()[0][4],
     model.layers[2].get_weights()[0][5],model.layers[2].get_weights()[0][6],model.layers[2].get_weights()[1]) ,fmt="%f", delimiter=",", header= "each column represent neuron and each row represent a weight when last row represent the bias")
-np.savetxt("data-weights-layer3.csv", (model.layers[1].get_weights()[0][0]
-,model.layers[1].get_weights()[1]) ,fmt="%f",delimiter=",", header= "each column represent neuron and each row represent a weight when last row represent the bias")
+np.savetxt("bdata-weights-layer3.csv", (model.layers[3].get_weights()[0][0],model.layers[3].get_weights()[0][1],model.layers[3].get_weights()[0][2],model.layers[3].get_weights()[0][3]
+,model.layers[3].get_weights()[1]) ,fmt="%f",delimiter=",", header= "each column represent neuron and each row represent a weight when last row represent the bias")
 
 
 # Show results in graph view
@@ -153,12 +163,13 @@ for i, (w, b) in enumerate(zip(weight_layer_2,bias_layer_2)):
     #print diagram of the model learning on the dataset
     fig=plot_decision_regions(X, labels, clf=model_n2)
     plt.title('Second hidden layer neuron '+str(i))
-    plt.show()
+    plt.show() 
+   
 
 
 #part d
 
-ada = Adaline(epochs=100,eta=0.05,minibatches=500, 
+ada = Adaline(epochs=100,eta=0.001,minibatches=200, 
 random_seed=1,
 print_progress=3)
 # y= labels.astype(np.integer)
@@ -175,12 +186,22 @@ b = np.reshape(b, (1,))
 l.append(w)
 l.append(b)
 model.layers[3].set_weights(l)
+np.savetxt("bdata-weights-layer3_adaline_learning_weight.csv", (model.layers[3].get_weights()[0][0],model.layers[3].get_weights()[0][1],model.layers[3].get_weights()[0][2],model.layers[3].get_weights()[0][3]
+,model.layers[3].get_weights()[1]) ,fmt="%f",delimiter=",", header= "each column represent neuron and each row represent a weight when last row represent the bias")
 
 fig = plt.figure(figsize=(3, 3))
 #print diagram of the model learning on the dataset
 fig=plot_decision_regions(X, labels, clf=model)
+test_predict = model.predict(test_data)
+test_predict_labels= np.where(test_predict <0.5 ,0,1)
+acc_test_ada= np.where(test_predict_labels==test_labels,1,0)
+right= sum(acc_test_ada)
+acc= right / test_predict_labels.size
+print("\n prediction accuracy test: ",acc)
 plt.title('Neurons from the next to last level using Adaline')
 plt.show()
 
 dt_ada= np.array(list(zip(X.T[0] ,X.T[1] ,ada.predict(inputn_2),labels)))
-np.savetxt("data-predict_class-true-label_last_layer_adaline.csv", dt_ada , fmt="%f" ,delimiter=",")
+dt_data_test= np.array(list(zip(test_data.T[0] ,test_data.T[1] ,test_predict_labels,test_labels)))
+np.savetxt("btest_data-predict_class-true-label_last_layer_adaline.csv", dt_ada , fmt="%f" ,delimiter=",")
+np.savetxt("btrain_data-predict_class-true-label_last_layer_adaline.csv", dt_data_test , fmt="%f" ,delimiter=",")
